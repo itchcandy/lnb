@@ -5,6 +5,7 @@
 
     public class Player : MonoBehaviour
     {
+        public Game game;
         public float walkSpeed = 1f;
         public float jumpIntensity = 1f;
         public float explosionRadius = 1f;
@@ -43,9 +44,22 @@
             }
         }
 
+        void OnCollisionEnter(Collision collision)
+        {
+            if(collision.gameObject.tag == "kill")
+            {
+                game.Restart();
+            }
+        }
+
+        public void Respawn(Vector3 position)
+        {
+            transform.position = position;
+        }
+
         void Jump()
         {
-            body.AddExplosionForce(jumpIntensity, transform.position  + new Vector3(0, -1, 0), explosionRadius, upwardMod);
+            body.AddExplosionForce(jumpIntensity, transform.position, explosionRadius, upwardMod);
         }
 
         void Walk(Vector2 moveBy)
