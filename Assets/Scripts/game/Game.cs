@@ -11,9 +11,9 @@
 
         void Start()
         {
-            level = Instantiate<Level>(Resources.Load<Level>("levels/Level 1"));
-            level.transform.SetParent(world);
-            level.transform.localPosition = Vector3.zero;
+            // level = Instantiate<Level>(Resources.Load<Level>("levels/Level 1"));
+            // level.transform.SetParent(world);
+            // level.transform.localPosition = Vector3.zero;
             // player.transform.position = level.spawnPoint.position;
             player.Respawn(level.spawnPoint.position);
         }

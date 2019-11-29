@@ -6,25 +6,47 @@
     public class Player : MonoBehaviour
     {
         public Game game;
+        public Transform eyes;
+        public float hSpeed = 200f;
+        public float vSpeed = 50f;
         public float walkSpeed = 1f;
         public float jumpIntensity = 1f;
         public float explosionRadius = 1f;
         public float upwardMod = 1f;
         Rigidbody body;
+        public Animator anim;
+        float xRotation = 0f;
 
         void Awake()
         {
             body = GetComponent<Rigidbody>();
+            anim = GetComponent<Animator>();
+            Cursor.lockState = CursorLockMode.None;
         }
 
         void Update()
         {
-            if(Input.GetKey(KeyCode.A)) Move(Direction.LEFT);
-            if(Input.GetKey(KeyCode.S)) Move(Direction.BACKWARD);
-            if(Input.GetKey(KeyCode.D)) Move(Direction.RIGHT);
-            if(Input.GetKey(KeyCode.W)) Move(Direction.FORWARD);
-            if(Input.GetKeyDown(KeyCode.Space)) Jump();
+            if(Input.GetKeyDown(KeyCode.C))
+                Cursor.lockState = (CursorLockMode)((int)Cursor.lockState ^ 1);
+            if(Cursor.lockState == CursorLockMode.Locked) {
+                var h = Input.GetAxis("Mouse X")*hSpeed*Time.deltaTime;
+                xRotation -= Mathf.Clamp(Input.GetAxis("Mouse Y")*hSpeed*Time.deltaTime, -90f, 90f);
+                transform.Rotate(0, h, 0);
+                eyes.localRotation = Quaternion.Euler(xRotation, 0, 0);
+                if(Input.GetKeyDown(KeyCode.W))
+                    anim.SetFloat("speed", 1f);
+                else if(Input.GetKeyUp(KeyCode.W))
+                    anim.SetFloat("speed", 0f);
+
+                // if(Input.GetKey(KeyCode.A)) Move(Direction.LEFT);
+                // if(Input.GetKey(KeyCode.S)) Move(Direction.BACKWARD);
+                // if(Input.GetKey(KeyCode.D)) Move(Direction.RIGHT);
+                // if(Input.GetKey(KeyCode.W)) Move(Direction.FORWARD);
+                if(Input.GetKeyDown(KeyCode.Space)) Jump();
+            }
         }
+
+        
 
         void Move(Direction direction)
         {
